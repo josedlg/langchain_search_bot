@@ -1,6 +1,6 @@
 # Import necessary modules and classes
 from langchain.agents import Tool, AgentExecutor, LLMSingleActionAgent
-from langchain import SerpAPIWrapper, LLMChain
+from langchain import SerpAPIWrapper, WolframAlphaAPIWrapper, LLMChain
 from template.template import CustomPromptTemplate, read_template
 from langchain.chat_models import ChatOpenAI
 from parser.parser import CustomOutputParser
@@ -15,12 +15,19 @@ config = load_config()
 def setup_agent(chatbot_name):
     # Instantiate a SerpAPIWrapper object for search functionality
     search = SerpAPIWrapper()
+      # Instantiate a WolframAlphaAPIWrapper object for search functionality
+    wolfram = WolframAlphaAPIWrapper()
     # Create a list of tools, in this case, a search tool
     tools = [
         Tool(
             name="Search",
             func=search.run,
             description="useful for when you need to answer questions about current events"
+        ),
+        Tool(
+            name="Alpha",
+            func=wolfram.run,
+            description="useful for when you need to answer computational questions"
         )
     ]
 
